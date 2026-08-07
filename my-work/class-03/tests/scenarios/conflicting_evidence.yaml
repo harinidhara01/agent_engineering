@@ -1,0 +1,30 @@
+account:
+  company_name: Meridian Automation Corp
+  industry: industrial_automation
+  employee_count: 8500
+  region: united_states
+  buying_signals:
+    - plant_modernization
+
+objective: Evaluate account fit and resolve conflicting headcount evidence.
+
+evidence:
+  - claim: Meridian Automation Corp employee count is reported as 8,500.
+    classification: verified_fact
+    source:
+      name: Corporate Press Kit
+      url: https://example.com/sources/meridian-press-kit
+      retrieved_at: "2026-08-07"
+    excerpt: Official corporate kit lists global workforce at 8,500 employees.
+
+  - claim: Meridian Automation Corp employee count reported as 3,100 after divestiture.
+    classification: conflict
+    source:
+      name: Financial News Quarterly
+      url: https://example.com/sources/meridian-q3-news
+      retrieved_at: "2026-08-07"
+    excerpt: Article reports active plant headcount dropped to 3,100 post-divestiture.
+
+state:
+  current_step: evidence_reconciliation
+  approval_status: escalation_required

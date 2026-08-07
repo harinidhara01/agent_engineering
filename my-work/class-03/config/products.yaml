@@ -33,3 +33,18 @@ products:
       - Helps identify high-value industrial AI opportunities.
       - Supports governed adoption of AI capabilities.
       - Connects business objectives with implementation planning.
+
+  - id: predictive_maintenance_hub
+    name: Predictive Maintenance Hub
+    description: >
+      Monitors plant equipment telemetry and applies predictive machine
+      learning models to detect potential component failures before unplanned downtime occurs.
+    target_buyers:
+      - Maintenance Director
+      - Head of Reliability Engineering
+      - VP of Plant Operations
+    approved_claims:
+      - Helps reduce unplanned plant downtime.
+      - Connects equipment telemetry for predictive failure detection.
+      - Provides early warnings for equipment maintenance scheduling.
+

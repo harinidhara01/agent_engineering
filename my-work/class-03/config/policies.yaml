@@ -20,6 +20,7 @@ prohibited_actions:
   - modify_crm
   - make_pricing_commitments
   - make_contractual_commitments
+  - bypass_human_approval
 
 requires_human_approval:
   - external_outreach

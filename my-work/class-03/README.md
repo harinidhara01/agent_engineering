@@ -31,7 +31,8 @@ This repository contains the deterministic, testable context package for the Wid
         ├── qualified_account.yaml     # Scenario 1: Qualified account fixture
         ├── unqualified_account.yaml   # Scenario 2: Unqualified account fixture
         ├── insufficient_evidence.yaml # Scenario 3: Missing information fixture
-        └── prompt_injection.yaml      # Scenario 4: Untrusted override attempt fixture
+        ├── prompt_injection.yaml      # Scenario 4: Untrusted override attempt fixture
+        └── conflicting_evidence.yaml  # Scenario 5: Conflicting evidence fixture
 ```
 
 ## The Five Context Layers

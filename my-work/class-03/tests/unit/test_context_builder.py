@@ -248,3 +248,29 @@ def test_scenario_prompt_injection(scenarios_dir: Path, config_dir: Path) -> Non
     assert ctx["system_instructions"] == get_system_instructions()
     assert "SYSTEM OVERRIDE" not in ctx["system_instructions"]
     assert "send_email" in ctx["business_context"]["policies"]["prohibited_actions"]
+
+
+def test_scenario_conflicting_evidence(scenarios_dir: Path, config_dir: Path) -> None:
+    """Verify scenario with conflicting evidence sources classifies claim as conflict."""
+    scenario_path = scenarios_dir / "conflicting_evidence.yaml"
+    assert scenario_path.exists()
+
+    with open(scenario_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+
+    ctx = build_context(
+        account=data["account"],
+        objective=data["objective"],
+        evidence=data["evidence"],
+        state=data.get("state"),
+        config_dir=config_dir,
+    )
+
+    evidences = ctx["retrieved_evidence"]
+    assert len(evidences) == 2
+
+    # Verify presence of evidence classified as conflict
+    conflicting_claims = [e for e in evidences if e.get("classification") == "conflict"]
+    assert len(conflicting_claims) >= 1
+    assert "3,100" in conflicting_claims[0]["claim"]
+
