@@ -1,0 +1,21 @@
+account:
+  company_name: Unknown Manufacturing Group
+  industry: unknown
+  employee_count: null
+  region: unknown
+  buying_signals: []
+
+objective: Evaluate account qualification and verify minimum company size.
+
+evidence:
+  - claim: Unknown Manufacturing Group exists in commercial registry without reported headcounts.
+    classification: unknown
+    source:
+      name: Registry Listing
+      url: https://example.com/sources/unknown-mfg-registry
+      retrieved_at: "2026-08-07"
+    excerpt: Basic registration record found with missing operational details.
+
+state:
+  current_step: evidence_check
+  approval_status: escalation_required

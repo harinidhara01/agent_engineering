@@ -1,0 +1,21 @@
+account:
+  company_name: Corner Market Goods
+  industry: consumer_retail
+  employee_count: 350
+  region: united_states
+  buying_signals: []
+
+objective: Evaluate account fit for WidgetWare product portfolio.
+
+evidence:
+  - claim: Corner Market Goods operates local grocery storefronts.
+    classification: verified_fact
+    source:
+      name: Business Directory Entry
+      url: https://example.com/sources/corner-market-profile
+      retrieved_at: "2026-08-07"
+    excerpt: Corner Market operates retail grocery stores in three cities.
+
+state:
+  current_step: initial_triage
+  approval_status: not_requested
