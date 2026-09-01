@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card success-state">
+    <h2>Service Booked!</h2>
+    <div class="booking-details">
+        <h3>{{ booking.provider_name }}</h3>
+        <p><strong>Service:</strong> {{ booking.service_category }}</p>
+        <p><strong>Date:</strong> {{ booking.appointment_date }}</p>
+        <p><strong>Time:</strong> {{ booking.appointment_time }}</p>
+        <p><strong>Location:</strong> {{ booking.location }}</p>
+        
+        <div class="confirmation-box">
+            <p><strong>Confirmation ID:</strong> {{ booking.booking_id }}</p>
+        </div>
+    </div>
+    
+    <div class="actions mt-2">
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary">Book Another Service</a>
+    </div>
+</div>
+{% endblock %}

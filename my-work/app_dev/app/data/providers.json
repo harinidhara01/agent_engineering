@@ -1,0 +1,72 @@
+[
+  {
+    "provider_id": "provider_001",
+    "provider_name": "ABC HVAC Services",
+    "service_type": "HVAC",
+    "service_area": ["Columbus, OH", "Dublin, OH"],
+    "rating": 4.8,
+    "price_estimate": 120,
+    "distance_miles": 4.2,
+    "availability": ["morning", "afternoon", "evening"]
+  },
+  {
+    "provider_id": "provider_002",
+    "provider_name": "XYZ Services",
+    "service_type": "HVAC",
+    "service_area": ["Columbus, OH"],
+    "rating": 4.1,
+    "price_estimate": 95,
+    "distance_miles": 12.0,
+    "availability": []
+  },
+  {
+    "provider_id": "provider_003",
+    "provider_name": "Cool Air Experts",
+    "service_type": "HVAC",
+    "service_area": ["Columbus, OH", "Worthington, OH"],
+    "rating": 4.7,
+    "price_estimate": 110,
+    "distance_miles": 6.1,
+    "availability": ["morning", "afternoon", "evening"]
+  },
+  {
+    "provider_id": "provider_004",
+    "provider_name": "Plumbing Pros",
+    "service_type": "Plumbing",
+    "service_area": ["Columbus, OH"],
+    "rating": 4.9,
+    "price_estimate": 150,
+    "distance_miles": 2.5,
+    "availability": ["morning", "afternoon"]
+  },
+  {
+    "provider_id": "provider_005",
+    "provider_name": "Quick Fix Plumbing",
+    "service_type": "Plumbing",
+    "service_area": ["Dublin, OH"],
+    "rating": 4.5,
+    "price_estimate": 130,
+    "distance_miles": 15.0,
+    "availability": ["evening"]
+  },
+  {
+    "provider_id": "provider_006",
+    "provider_name": "Sparky Electric",
+    "service_type": "Electrical",
+    "service_area": ["Columbus, OH"],
+    "rating": 4.6,
+    "price_estimate": null,
+    "distance_miles": 5.0,
+    "availability": ["morning", "afternoon", "evening"]
+  },
+  {
+    "provider_id": "provider_007",
+    "provider_name": "No Show Electric",
+    "service_type": "Electrical",
+    "service_area": ["Columbus, OH"],
+    "rating": 2.1,
+    "price_estimate": 80,
+    "distance_miles": 8.0,
+    "availability": []
+  }
+]

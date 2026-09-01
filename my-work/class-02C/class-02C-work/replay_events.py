@@ -73,12 +73,15 @@ def emit(events: list[dict[str, Any]], project_id: str, speed: float) -> None:
         "deployment.environment=classroom,class.name=02C,replay.mode=telemetry_only"
     )
 
-    from google.adk.telemetry.google_cloud import get_gcp_exporters
-    from google.adk.telemetry.setup import maybe_set_otel_providers
+    from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
     from opentelemetry import trace
 
-    exporters = get_gcp_exporters(enable_cloud_tracing=True)
-    maybe_set_otel_providers([exporters])
+    provider = TracerProvider()
+    exporter = CloudTraceSpanExporter(project_id=project_id)
+    provider.add_span_processor(BatchSpanProcessor(exporter))
+    trace.set_tracer_provider(provider)
 
     provider = trace.get_tracer_provider()
     tracer = trace.get_tracer("class-02c.event-replay")

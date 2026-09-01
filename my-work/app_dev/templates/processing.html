@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card processing-container">
+    <h2>Processing Your Request</h2>
+    <p>Please wait while we evaluate the best options for you...</p>
+    
+    <div class="workflow-steps">
+        <ul id="sequential-steps" class="step-list">
+            <li id="step-1" class="pending">Understanding your request</li>
+            <li id="step-2" class="pending">Identifying service</li>
+            <li id="step-3" class="pending">Checking requirements</li>
+            <li id="step-4" class="pending">Preparing service request</li>
+        </ul>
+        
+        <div id="parallel-stage" class="hidden">
+            <h3>Finding providers</h3>
+            <ul id="parallel-steps" class="step-list parallel">
+                <li id="prov-1" class="pending">Provider A</li>
+                <li id="prov-2" class="pending">Provider B</li>
+                <li id="prov-3" class="pending">Provider C</li>
+                <li id="prov-4" class="pending">Provider D</li>
+            </ul>
+        </div>
+        
+        <div id="ranking-stage" class="hidden">
+            <ul class="step-list">
+                <li id="step-rank" class="pending">Comparing providers</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="error-message" class="error-msg hidden"></div>
+</div>
+{% endblock %}

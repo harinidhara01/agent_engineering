@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="recommendations-container">
+    <h2>Recommended Providers</h2>
+    
+    {% if not providers %}
+        <div class="card error-state">
+            <p>I couldn't find an available provider that matches your request for that time. You can try a different appointment time.</p>
+            <a href="{{ url_for('main.index') }}" class="btn">Start Over</a>
+        </div>
+    {% else %}
+        <p>I found a few providers that match your request. Here are the best options:</p>
+        
+        <div class="provider-list">
+            {% for provider in providers %}
+            <div class="card provider-card {% if loop.first %}best-match{% endif %}">
+                {% if loop.first %}
+                <div class="badge">Top Recommendation</div>
+                {% endif %}
+                <h3>{{ provider.provider_name }}</h3>
+                <ul class="provider-details">
+                    <li><strong>Service:</strong> {{ service_request.service_category }}</li>
+                    <li><strong>Rating:</strong> {{ provider.rating if provider.rating else 'N/A' }}</li>
+                    <li><strong>Estimated price:</strong> ${{ provider.price if provider.price else 'N/A' }}</li>
+                    <li><strong>Distance:</strong> {{ provider.distance_miles if provider.distance_miles else 'N/A' }} miles</li>
+                    <li><strong>Available:</strong> Yes</li>
+                </ul>
+                <p class="reason"><em>{{ provider.reason }}</em></p>
+                
+                <form action="{{ url_for('main.book') }}" method="POST">
+                    <input type="hidden" name="provider_id" value="{{ provider.provider_id }}">
+                    <button type="submit" class="btn btn-primary">Book Service</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="actions">
+            <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Go Back</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
