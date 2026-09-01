@@ -606,11 +606,34 @@ Return to Trace Explorer:
 Answer these questions:
 
 1. Which live span consumed the most time?
+ invoke_agent writers_room — 27.173s
 2. Where can you see the loop repeat?
+  call_llm
+generate_content gemini-3.6-flash
+tool execution / state updates
+another call_llm
+another model generation
+ the critic section followed by:
+execute_tool exit_loop
 3. Where can you see parallel fan-out and join?
+invoke_agent box_office_researcher — 15.606s
+invoke_agent casting_agent — 8.853s
+Their timeline bars overlap, meaning they were executing concurrently.
 4. Which ADK Events changed state?
+recorded.state_delta.keys
+execute_tool append_to_state
 5. Why are the replay trace IDs and durations different?
+Because the replay is a new telemetry reconstruction, not the original execution.
+The replay:
+creates new trace IDs
+creates new span IDs
+reconstructs spans from events.jsonl
+uses scaled relative event timing
 6. Why is telemetry replay safer and cheaper than rerunning the agent?
+Because replay:
+does not call the model
+does not execute tools
+does not make external API calls
 7. What debugging questions require the live trace rather than the replay?
 
 ---
