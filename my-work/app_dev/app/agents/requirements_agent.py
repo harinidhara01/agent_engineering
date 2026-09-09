@@ -1,19 +1,58 @@
+import os
+from google import genai
+from google.genai import types
+from pydantic import BaseModel, Field
+
+class RequirementsResponse(BaseModel):
+    is_complete: bool = Field(description="True if the request has sufficient information to proceed, False otherwise")
+    missing_fields: list[str] = Field(description="List of required fields that are missing or ambiguous (empty list if complete)")
+    reasoning: str = Field(description="Explanation of the completeness evaluation")
+
 class RequirementsAgent:
-    def process(self, intake_data: dict, classification_data: dict) -> dict:
-        required_fields = ["location", "preferred_date", "preferred_time"]
-        missing_fields = []
+    """
+    Requirements AI Agent: Uses an LLM to evaluate if the collected data has all
+    necessary fields to book the identified service category.
+    """
+    def __init__(self):
+        self.client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
+        self.model = os.environ.get("MODEL", "gemini-1.5-flash")
+
+    def process(self, classified_data: dict) -> dict:
+        prompt = f"""
+        You are a Requirements AI Agent for a Home Service Concierge.
+        Evaluate if the following service request has all the necessary components to proceed.
         
-        for field in required_fields:
-            if not intake_data.get(field) or not str(intake_data.get(field)).strip():
-                missing_fields.append(field)
-                
-        if classification_data.get("service_category") == "Unknown":
-            missing_fields.append("service_category")
+        A complete request must have a clearly defined problem, a location, a preferred_date, 
+        a preferred_time, and a recognized service_category (cannot be 'Unknown').
+        
+        Current Request Data:
+        Problem: {classified_data.get('problem')}
+        Location: {classified_data.get('location')}
+        Preferred Date: {classified_data.get('preferred_date')}
+        Preferred Time: {classified_data.get('preferred_time')}
+        Service Category: {classified_data.get('service_category')}
+        Urgency: {classified_data.get('urgency')}
+        """
+        
+        try:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=RequirementsResponse,
+                    temperature=0.1
+                ),
+            )
+            result = response.parsed.model_dump()
             
-        complete = len(missing_fields) == 0
-        
-        return {
-            "complete": complete,
-            "required_information": required_fields + ["service_category", "problem"],
-            "missing_information": missing_fields
-        }
+            classified_data["is_complete"] = result["is_complete"]
+            classified_data["missing"] = result["missing_fields"]
+            classified_data["requirements_reasoning"] = result["reasoning"]
+            return classified_data
+            
+        except Exception as e:
+            print(f"RequirementsAgent LLM Error: {e}")
+            classified_data["is_complete"] = False
+            classified_data["missing"] = ["LLM Error occurred during validation"]
+            return classified_data

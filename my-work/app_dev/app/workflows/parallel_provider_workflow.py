@@ -28,7 +28,8 @@ class ParallelProviderWorkflow:
         provider_results = []
         
         # Parallel fan-out
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        # Using max_workers=1 to prevent hitting Gemini API free tier concurrent limits
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             futures = [
                 executor.submit(self._evaluate_provider, provider, service_request)
                 for provider in self.providers_data

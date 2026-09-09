@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
-from app.workflows.sequential_pipeline import SequentialPipeline
-from app.workflows.parallel_provider_workflow import ParallelProviderWorkflow
+from app.agents.orchestrator_agent import OrchestratorAgent
 from app.services.booking_service import BookingService
 
 bp = Blueprint('main', __name__)
@@ -30,26 +29,22 @@ def process_pipeline():
     data = session.get('request_data')
     if not data:
         return jsonify({"success": False, "error": "No request data."}), 400
-        
-    seq_pipeline = SequentialPipeline()
-    seq_result = seq_pipeline.run(
-        request_text=data.get('problem'),
+
+    # Delegate entirely to the Root Orchestrator Agent
+    orchestrator = OrchestratorAgent()
+    result = orchestrator.run(
+        problem=data.get('problem'),
         location=data.get('location'),
         preferred_date=data.get('preferred_date'),
-        preferred_time=data.get('preferred_time')
+        preferred_time=data.get('preferred_time'),
     )
-    
-    if not seq_result.get("success"):
-        return jsonify(seq_result), 400
-        
-    service_request = seq_result.get("service_request")
-    session['service_request'] = service_request
-    
-    parallel_workflow = ParallelProviderWorkflow()
-    ranked_providers = parallel_workflow.run(service_request)
-    
-    session['recommendations'] = ranked_providers
-    
+
+    if not result.get("success"):
+        return jsonify(result), 400
+
+    session['service_request'] = result.get("service_request")
+    session['recommendations'] = result.get("providers", [])
+
     return jsonify({"success": True})
 
 @bp.route('/recommendations')

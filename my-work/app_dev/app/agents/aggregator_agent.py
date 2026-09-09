@@ -6,7 +6,7 @@ class AggregatorAgent:
             if not result:
                 continue
                 
-            if result.get("eligible") and result.get("available"):
+            if result.get("eligible"):
                 eligible_providers.append(result)
                 
         return {

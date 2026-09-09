@@ -1,61 +1,79 @@
+import os
+import json
+from google import genai
+from google.genai import types
+
 class ProviderAgent:
+    """
+    Provider AI Agent: Evaluates a single provider's capability to fulfill a service request
+    using an LLM grounded by provider_rules.md.
+    """
     def __init__(self, provider_data: dict):
         self.provider = provider_data
+        self.client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
+        self.model = os.environ.get("MODEL", "gemini-1.5-flash")
+        
+        # Load provider rules
+        self.rules = ""
+        rules_path = os.path.join(os.path.dirname(__file__), '..', '..', 'references', 'provider_rules.md')
+        if os.path.exists(rules_path):
+            with open(rules_path, 'r') as f:
+                self.rules = f.read()
 
     def evaluate(self, service_request: dict) -> dict:
-        eligible = True
-        available = True
-        reason = ""
-
-        # Check service compatibility
-        if self.provider.get("service_type") != service_request.get("service_category"):
-            eligible = False
-            reason = "Service type mismatch."
-
-        # Check location
-        req_location = service_request.get("location")
-        if req_location and req_location not in self.provider.get("service_area", []):
-            eligible = False
-            reason = "Outside service area."
-
-        # Check availability
-        # We assume preferred_time is somewhat mapped to availability array loosely for V1
-        req_time = service_request.get("preferred_time", "").lower()
-        provider_availability = [a.lower() for a in self.provider.get("availability", [])]
+        prompt = f"""
+        You are a Provider AI Agent for a Home Service Concierge.
+        Evaluate if the following Provider can fulfill the Service Request.
         
-        # Simple string match logic for mock data
-        if not provider_availability:
-            available = False
-            eligible = False
-            reason = "No availability."
-        else:
-            time_match = False
-            if req_time:
-                for avail in provider_availability:
-                    if avail in req_time or req_time in avail:
-                        time_match = True
-                        break
-                # If no direct match but has some availability, we'll mark available but maybe note it.
-                # Actually, provider rules say "A provider is available only when the provider data indicates availability for the requested appointment window."
-                # Let's do a basic intersection. If req_time isn't matched exactly by keyword, we might just fail them if we are strict.
-                # For simplicity, if we find 'morning', 'afternoon', 'evening' in req_time, require it in provider.
-                time_keywords = ["morning", "afternoon", "evening"]
-                req_keys = [k for k in time_keywords if k in req_time]
-                if req_keys:
-                    if not any(k in provider_availability for k in req_keys):
-                        available = False
-                        eligible = False
-                        reason = f"Not available during {', '.join(req_keys)}."
-            if available and eligible:
-                reason = "Available and matches service requirements."
-
-        return {
-            "provider_id": self.provider.get("provider_id"),
-            "provider_name": self.provider.get("provider_name"),
-            "eligible": eligible,
-            "available": available,
-            "price": self.provider.get("price_estimate"),
-            "distance_miles": self.provider.get("distance_miles"),
-            "rating": self.provider.get("rating"),
-            "reason": reason
-        }
+        Strictly apply the rules from the Provider Rules Document.
+        
+        --- Provider Rules ---
+        {self.rules}
+        
+        Important Matching Instructions:
+        1. If the provider's `service_type` matches the `Category`, consider them compatible.
+        2. If the provider's `service_area` includes the city in the `Location`, consider them in-area.
+        3. If the provider's `availability` includes the time of day (e.g., 'morning') requested in the `Appointment Window`, consider them available.
+        
+        --- Service Request ---
+        Category: {service_request.get('service_category')}
+        Urgency: {service_request.get('urgency')}
+        Location: {service_request.get('location')}
+        Appointment Window: {service_request.get('appointment_window')}
+        Problem Summary: {service_request.get('problem_summary')}
+        
+        --- Provider Details ---
+        {json.dumps(self.provider, indent=2)}
+        
+        Respond ONLY with a raw JSON object with this exact structure, no markdown formatting:
+        {{
+            "eligible": true,
+            "reason": "Brief explanation"
+        }}
+        """
+        
+        result_dict = dict(self.provider)
+        try:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt
+            )
+            
+            # json is imported at top of file
+            text = response.text.strip()
+            if text.startswith("```json"):
+                text = text[7:-3]
+            elif text.startswith("```"):
+                text = text[3:-3]
+            
+            result = json.loads(text.strip())
+            
+            result_dict["eligible"] = result.get("eligible", False)
+            result_dict["reason"] = result.get("reason", "No reason provided")
+            return result_dict
+            
+        except Exception as e:
+            print(f"ProviderAgent LLM Error for {self.provider.get('provider_name')}: {e}")
+            result_dict["eligible"] = False
+            result_dict["reason"] = "Evaluation failed due to LLM error."
+            return result_dict

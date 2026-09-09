@@ -18,19 +18,19 @@ class SequentialPipeline:
         classification_data = self.classification_agent.process(intake_data)
         
         # Step 3: Requirements
-        requirements_data = self.requirements_agent.process(intake_data, classification_data)
+        requirements_data = self.requirements_agent.process(classification_data)
         
-        if not requirements_data.get("complete"):
+        if not requirements_data.get("is_complete"):
             return {
                 "success": False,
                 "error": "Missing required information.",
-                "missing": requirements_data.get("missing_information")
+                "missing": requirements_data.get("missing", [])
             }
             
         # Step 4: Service Request
-        service_request = self.service_request_agent.process(intake_data, classification_data)
+        final_data = self.service_request_agent.process(requirements_data)
         
         return {
             "success": True,
-            "service_request": service_request
+            "service_request": final_data.get("service_request")
         }

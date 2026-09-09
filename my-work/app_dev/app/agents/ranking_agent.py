@@ -12,7 +12,7 @@ class RankingAgent:
             sort_distance = distance if distance is not None else float('inf')
             
             # 3. Price (ascending)
-            price = p.get("price")
+            price = p.get("price_estimate")
             sort_price = price if price is not None else float('inf')
             
             return (sort_rating, sort_distance, sort_price)
@@ -24,7 +24,7 @@ class RankingAgent:
             best = ranked[0]
             if best.get("rating") and best.get("rating") >= 4.5:
                 best["reason"] = "Recommended because it is highly rated and matches your request."
-            elif best.get("price") and all(p.get("price", float('inf')) >= best["price"] for p in ranked):
+            elif best.get("price_estimate") and all(p.get("price_estimate", float('inf')) >= best["price_estimate"] for p in ranked):
                 best["reason"] = "Lowest available price among eligible providers."
             else:
                 best["reason"] = "Best match based on availability, rating, distance, and price."
