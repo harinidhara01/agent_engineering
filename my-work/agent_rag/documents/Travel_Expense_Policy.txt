@@ -1,0 +1,15 @@
+# Acme Corp - Travel & Expense Reimbursement Policy
+
+## Section 1: Business Meals Reimbursement Limit
+The maximum business meal reimbursement limit is $75 per person for dinner and $30 per person for lunch.
+
+Itemized receipts are strictly required for all expense claims exceeding $25.
+
+## Section 2: Airfare and Lodging Standards
+All domestic flights must be booked in Economy Class at least 14 days in advance.
+
+Hotel accommodations are capped at $250 per night in standard tier cities and $350 per night in high-cost metro areas (NYC, SF, London).
+
+## Section 3: Mileage and Ground Transportation
+Personal vehicle mileage used for official business is reimbursed at the current IRS standard rate of 67 cents per mile.
+

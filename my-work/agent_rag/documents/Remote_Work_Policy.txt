@@ -1,0 +1,15 @@
+# Acme Corp - Remote & Hybrid Work Policy
+
+## Section 1: Work Location & Remote Eligibility
+Full-time employees whose roles do not require physical presence may request a hybrid or fully remote work arrangement subject to manager approval.
+
+Hybrid employees are expected to work from the office at least 2 designated core days per week.
+
+## Section 2: Home Office Equipment Allowance
+Approved remote employees receive a one-time home office setup stipend of up to $500 for ergonomic chairs, external monitors, and desktop accessories.
+
+A monthly internet reimbursement stipend of $50 is provided to all full-time remote staff.
+
+## Section 3: Core Working Hours & Availability
+Remote employees must remain available on Slack and email during core business hours between 9:00 AM and 3:00 PM local time.
+

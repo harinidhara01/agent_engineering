@@ -1,0 +1,10 @@
+# Acme Corp - Standard Working Hours Policy
+
+## Section 1: Standard Workweek
+The standard workweek consists of 40 hours, typically scheduled Monday through Friday from 9:00 AM to 5:00 PM local time with a 1-hour lunch break.
+
+Flexible scheduling options (e.g. 8:00 AM - 4:00 PM) may be arranged with supervisor confirmation.
+
+## Section 2: Overtime & Time Off in Lieu
+Non-exempt employees working beyond 40 hours per week will receive overtime pay at 1.5 times their regular hourly rate in compliance with federal law.
+

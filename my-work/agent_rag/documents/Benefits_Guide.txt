@@ -1,0 +1,13 @@
+# Acme Corp - Employee Health & Benefits Guide
+
+## Section 1: Health & Dental Coverage
+Acme Corp covers 85% of monthly healthcare premiums for employees and 70% for enrolled dependents across PPO and HSA eligible plans.
+
+Wellness incentives include up to $300 annual gym or fitness subscription reimbursement.
+
+## Section 2: 401(k) Retirement Matching
+Acme Corp matches 100% of employee 401(k) contributions up to 4% of base salary, with immediate 100% vesting upon hire.
+
+## Section 3: Professional Development & Tuition
+Employees are eligible for up to $2,500 per calendar year in tuition or professional certification reimbursement after completing 6 months of employment.
+

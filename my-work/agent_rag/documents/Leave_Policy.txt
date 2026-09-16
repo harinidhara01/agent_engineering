@@ -1,0 +1,17 @@
+# Acme Corp - Employee Leave Policy
+
+## Section 1: Vacation Leave Policy
+All full-time employees accrue 15 days of paid vacation leave per calendar year during their first three years of service.
+
+Employees with more than 3 years of service accrue 20 days of paid vacation per year. Vacation requests must be submitted at least 2 weeks in advance via HR Portal.
+
+## Section 2: Sick and Personal Leave
+Employees receive 10 days of paid sick leave annually. Unused sick leave up to 5 days can be carried over into the next calendar year.
+
+Sick leave taken for 3 or more consecutive business days requires a physician certificate note.
+
+## Section 3: Parental Leave
+Acme Corp provides up to 12 weeks of fully paid parental leave for primary caregivers following the birth, adoption, or foster placement of a child.
+
+Secondary caregivers are eligible for 4 weeks of fully paid parental leave.
+

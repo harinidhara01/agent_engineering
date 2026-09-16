@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Policy Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Bar / Tabs -->
+        <header class="app-header">
+            <div class="brand">
+                <i class="fa-solid fa-user-shield brand-icon"></i>
+                <div class="brand-text">
+                    <h1>Employee Policy Assistant</h1>
+                    <span class="badge">RAG & Agent Enabled</span>
+                </div>
+            </div>
+            
+            <nav class="tabs-nav">
+                <button class="tab-btn active" id="tab-btn-assistant" onclick="switchTab('assistant')">
+                    <i class="fa-solid fa-comments"></i> Assistant
+                </button>
+                <button class="tab-btn" id="tab-btn-evidence" onclick="switchTab('evidence')">
+                    <i class="fa-solid fa-magnifying-glass-location"></i> Evidence
+                </button>
+                <button class="tab-btn" id="tab-btn-trace" onclick="switchTab('trace')">
+                    <i class="fa-solid fa-diagram-project"></i> Execution Trace
+                </button>
+                <button class="tab-btn" id="tab-btn-kb" onclick="switchTab('kb')">
+                    <i class="fa-solid fa-database"></i> Knowledge Base
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Body Content Panels -->
+        <main class="main-content">
+            <!-- ASSISTANT TAB -->
+            <section id="panel-assistant" class="tab-panel active">
+                <div class="chat-wrapper">
+                    <aside class="chat-sidebar">
+                        <button class="btn btn-primary btn-block" onclick="startNewChat()">
+                            <i class="fa-solid fa-plus"></i> New Chat
+                        </button>
+                        <div class="chat-list-container">
+                            <h3><i class="fa-solid fa-history"></i> Recent Chats</h3>
+                            <ul id="chat-list" class="chat-list">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+                        <div class="sample-questions-box">
+                            <h4><i class="fa-solid fa-lightbulb"></i> Try Sample Questions</h4>
+                            <button class="sample-q-btn" onclick="useSampleQuestion('What is the vacation policy?')">What is the vacation policy?</button>
+                            <button class="sample-q-btn" onclick="useSampleQuestion('How many days of parental leave are available?')">How many days of parental leave are available?</button>
+                            <button class="sample-q-btn" onclick="useSampleQuestion('Can employees work remotely?')">Can employees work remotely?</button>
+                            <button class="sample-q-btn" onclick="useSampleQuestion('What is the business meal reimbursement limit?')">What is the business meal reimbursement limit?</button>
+                            <button class="sample-q-btn" onclick="useSampleQuestion('What holidays are observed in Ohio in 2026?')">What holidays are observed in Ohio in 2026?</button>
+                        </div>
+                    </aside>
+
+                    <div class="chat-main">
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Welcome Card -->
+                            <div class="welcome-card">
+                                <div class="welcome-icon"><i class="fa-solid fa-robot"></i></div>
+                                <h2>Welcome to Employee Policy Assistant</h2>
+                                <p>Ask any question about leave policies, travel reimbursements, working hours, benefits, or official state holidays.</p>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-area">
+                            <div class="input-controls">
+                                <textarea id="question-input" placeholder="Type your employee policy question here..." rows="2"></textarea>
+                                <div class="action-buttons">
+                                    <button class="btn btn-secondary" onclick="clearQuestionInput()">
+                                        <i class="fa-solid fa-eraser"></i> Clear
+                                    </button>
+                                    <button class="btn btn-primary" id="send-btn" onclick="sendQuestion()">
+                                        <i class="fa-solid fa-paper-plane"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EVIDENCE TAB -->
+            <section id="panel-evidence" class="tab-panel">
+                <div class="evidence-container">
+                    <div class="evidence-left-pane">
+                        <div class="pane-header">
+                            <h3><i class="fa-solid fa-comments"></i> Conversation & Query</h3>
+                        </div>
+                        <div id="evidence-user-query" class="evidence-card">
+                            <em>Select a citation from the assistant answer to view evidence.</em>
+                        </div>
+                        <div id="evidence-assistant-resp" class="evidence-card"></div>
+                    </div>
+
+                    <div class="evidence-right-pane">
+                        <div class="pane-header">
+                            <h3 id="evidence-right-title"><i class="fa-solid fa-file-invoice"></i> Evidence Source</h3>
+                            <span id="evidence-type-badge" class="badge">None</span>
+                        </div>
+                        <div id="evidence-source-content" class="evidence-content-box">
+                            <p class="placeholder-text">Click any inline citation link [Citation X] in the chat to examine source documents, page numbers, and highlighted text chunks.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXECUTION TRACE TAB -->
+            <section id="panel-trace" class="tab-panel">
+                <div class="trace-container">
+                    <div class="flow-diagram-card">
+                        <h3><i class="fa-solid fa-sitemap"></i> High-Level Agent Execution Flow</h3>
+                        <div class="flow-diagram">
+                            <div class="flow-step">User Request</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step highlight">Agent</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step">RAG / Tool Selection</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step">Vector DB / Tool</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step">Retrieved Context / Tool Result</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step highlight">Gemini</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step">Response</div>
+                        </div>
+                    </div>
+
+                    <div class="trace-history-card">
+                        <h3><i class="fa-solid fa-list-check"></i> Complete Execution Traces</h3>
+                        <div id="trace-cards-container" class="trace-cards-container">
+                            <!-- Populated dynamically with full execution details -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KNOWLEDGE BASE TAB -->
+            <section id="panel-kb" class="tab-panel">
+                <div class="kb-container">
+                    <div class="upload-card">
+                        <h3><i class="fa-solid fa-cloud-arrow-up"></i> Upload Employee Policy Document</h3>
+                        <p class="subtext">Supported formats: PDF, TXT, DOCX. Content duplicate SHA-256 detection active.</p>
+
+                        <!-- Ingestion Flow Diagram -->
+                        <div class="ingest-pipeline">
+                            <span class="pipe-node">Upload</span> →
+                            <span class="pipe-node">Duplicate Check</span> →
+                            <span class="pipe-node">Extract Text</span> →
+                            <span class="pipe-node">Chunk</span> →
+                            <span class="pipe-node">HuggingFace Embeddings</span> →
+                            <span class="pipe-node">ChromaDB / Vector Store</span>
+                        </div>
+
+                        <form id="upload-form" class="upload-box" onsubmit="handleDocumentUpload(event)">
+                            <input type="file" id="doc-file-input" accept=".pdf,.txt,.docx" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-upload"></i> Upload & Ingest
+                            </button>
+                        </form>
+                        <div id="upload-progress" class="upload-progress hidden">
+                            <div class="spinner"></div>
+                            <span id="upload-status-text">Ingesting document...</span>
+                        </div>
+                    </div>
+
+                    <div class="kb-stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-val" id="stat-docs-count">0</span>
+                                <span class="stat-lbl">Indexed Documents</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fa-solid fa-cubes"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-val" id="stat-chunks-count">0</span>
+                                <span class="stat-lbl">Total Chunks</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fa-solid fa-microchip"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-val">all-MiniLM-L6-v2</span>
+                                <span class="stat-lbl">Local Embedding Model</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="indexed-docs-card">
+                        <h3><i class="fa-solid fa-folder-open"></i> Indexed Documents</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Filename</th>
+                                    <th>Type</th>
+                                    <th>File Size</th>
+                                    <th>Chunks</th>
+                                    <th>SHA-256 Hash</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="documents-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Chunk Viewer Modal -->
+    <div id="chunk-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-doc-title">Document Chunks</h3>
+                <button class="close-btn" onclick="closeChunkModal()">&times;</button>
+            </div>
+            <div id="modal-chunks-body" class="modal-body">
+                <!-- Chunks listed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Execution Trace Detail Modal -->
+    <div id="trace-modal" class="modal hidden">
+        <div class="modal-content" style="width:750px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-diagram-project"></i> Execution Trace Breakdown</h3>
+                <button class="close-btn" onclick="closeTraceModal()">&times;</button>
+            </div>
+            <div id="trace-modal-body" class="modal-body">
+                <!-- Detailed trace breakdown populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Duplicate Alert Modal -->
+    <div id="dup-modal" class="modal hidden">
+        <div class="modal-content warning">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> Duplicate Document Detected</h3>
+                <button class="close-btn" onclick="closeDupModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="dup-modal-message">An identical document content hash already exists in the Knowledge Base.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="cancelDupUpload()">Cancel</button>
+                    <button class="btn btn-danger" onclick="confirmReplaceUpload()">Replace Existing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

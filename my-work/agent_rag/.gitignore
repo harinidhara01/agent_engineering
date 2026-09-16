@@ -1,0 +1,13 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+database/app.db
+database/vector_db/
+database/logs.json
+pip_cache/
+tmp/
+hf_home/
+.cache/
+*.log
