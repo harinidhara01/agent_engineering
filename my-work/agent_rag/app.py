@@ -103,19 +103,23 @@ def get_document_chunks(doc_id):
 
 @app.route("/api/documents/upload", methods=["POST"])
 def upload_document():
-    if "file" not in request.files:
-        return jsonify({"error": "No file attached in request"}), 400
-    
-    file = request.files["file"]
-    if not file or file.filename == "":
-        return jsonify({"error": "Invalid filename"}), 400
+    try:
+        if "file" not in request.files:
+            return jsonify({"status": "error", "error": "No file attached in request"}), 400
+        
+        file = request.files["file"]
+        if not file or file.filename == "":
+            return jsonify({"status": "error", "error": "Invalid filename"}), 400
 
-    replace = request.form.get("replace") == "true"
-    temp_path = os.path.join(Config.DOCUMENTS_DIR, file.filename)
-    file.save(temp_path)
+        replace = request.form.get("replace") == "true"
+        os.makedirs(Config.DOCUMENTS_DIR, exist_ok=True)
+        temp_path = os.path.join(Config.DOCUMENTS_DIR, file.filename)
+        file.save(temp_path)
 
-    result = ingest_document(temp_path, file.filename, replace_existing=replace)
-    return jsonify(result)
+        result = ingest_document(temp_path, file.filename, replace_existing=replace)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5005, debug=True)
